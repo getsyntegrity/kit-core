@@ -5,8 +5,6 @@ import (
 	"strconv"
 	"sync"
 
-	kitlog "libs/kit-logger/pkg/logger"
-
 	"github.com/sony/sonyflake"
 )
 
@@ -24,7 +22,6 @@ func initSonyflake() error {
 		sonyflakeInstance = sonyflake.NewSonyflake(sonyflake.Settings{})
 		if sonyflakeInstance == nil {
 			initErr = fmt.Errorf("failed to create Sonyflake instance")
-			kitlog.L().Error("Failed to create Sonyflake", "error", initErr)
 		}
 	})
 	return initErr
@@ -33,16 +30,13 @@ func initSonyflake() error {
 // GenerateID generates a new unique ID.
 func GenerateID() ID {
 	if err := initSonyflake(); err != nil {
-		kitlog.L().Error("Failed to initialize Sonyflake", "error", err)
 		return 0
 	}
 	if sonyflakeInstance == nil {
-		kitlog.L().Error("Sonyflake instance is nil")
 		return 0
 	}
 	id, err := sonyflakeInstance.NextID()
 	if err != nil {
-		kitlog.L().Error("Failed to generate ID", "error", err)
 		return 0
 	}
 	return ID(id)
