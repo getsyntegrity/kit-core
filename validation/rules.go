@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/getsyntegrity/kit-core/idgen"
+	"github.com/getsyntegrity/kit-core/pkg/idgen"
 )
 
 // CommonValidationRules provides a collection of common validation rules.
