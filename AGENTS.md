@@ -16,6 +16,50 @@ This document is the source of truth for how kit-core is designed, implemented, 
 
 ---
 
+## Architectural Quality Principles
+
+kit-core enforces strict structural discipline. These principles are mandatory.
+
+### High Cohesion
+
+- Each package MUST represent a single, clearly defined responsibility.
+- Mixing domain rules with infrastructure or adapter logic inside the same package is FORBIDDEN.
+- Package names MUST reflect their responsibility precisely.
+- If a package requires unrelated concepts, it MUST be split.
+
+### Low Coupling
+
+- Dependencies MUST point inward only.
+- Cross-layer shortcuts are FORBIDDEN.
+- Cross-layer imports are FORBIDDEN.
+- Circular dependencies are FORBIDDEN.
+- Domain MUST NOT depend on infrastructure, adapters, or concrete implementations.
+- Application MUST depend only on domain and interfaces.
+
+### Pure Functions First
+
+- Pure functions are first-class citizens.
+- Any function that can be pure MUST be pure.
+- Business and domain logic MUST prefer pure functions.
+- Side effects MUST be isolated to adapters or injected dependencies.
+- Hidden mutable state is FORBIDDEN.
+- Shared mutable state is FORBIDDEN.
+- Package-level mutable variables are FORBIDDEN.
+
+---
+
+## 8. Cohesion and Structural Awareness
+
+Contributors must:
+
+- Recognize when a package violates single responsibility.
+- Detect hidden coupling between domain and infrastructure.
+- Prefer extracting pure functions over embedding logic in orchestrators.
+- Avoid introducing hidden mutable state.
+- Understand that determinism is strengthened by purity and cohesion.
+
+---
+
 ## Architectural Invariants
 
 - **Domain must be pure** — Logic that expresses business or domain rules must be pure functions of their arguments and injected interfaces. No direct I/O, no `time`, no `math/rand` in that logic.
@@ -45,3 +89,9 @@ This document is the source of truth for how kit-core is designed, implemented, 
 ## Validation
 
 Invariants and principles are checked by a validation procedure. See **[AGENTS.validation.md](./AGENTS.validation.md)** for the exact steps and criteria.
+
+- [ ] No circular dependencies.
+- [ ] No cross-layer imports.
+- [ ] Domain contains only pure logic.
+- [ ] No package-level mutable variables.
+- [ ] Cohesion respected (no mixed concerns in package).

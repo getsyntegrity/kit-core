@@ -16,8 +16,8 @@ func NewCommonValidationRules() *CommonValidationRules {
 }
 
 var (
-	emailRegex    = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
-	ulidRegex     = regexp.MustCompile(`^[0-9A-HJKMNP-TV-Z]{26}$`)
+	emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
+	ulidRegex  = regexp.MustCompile(`^[0-9A-HJKMNP-TV-Z]{26}$`)
 )
 
 // IsValidEmail validates email format.

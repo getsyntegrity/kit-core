@@ -10,8 +10,8 @@ import (
 
 // Cursor represents a pagination cursor for efficient pagination.
 type Cursor struct {
-	Direction map[string]string   `json:"direction"`
-	Timestamp time.Time           `json:"timestamp"`
+	Direction map[string]string      `json:"direction"`
+	Timestamp time.Time              `json:"timestamp"`
 	Values    map[string]interface{} `json:"values"`
 }
 

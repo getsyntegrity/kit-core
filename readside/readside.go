@@ -32,9 +32,9 @@ type SaveLastVersionIfContiguousParams struct {
 
 // Errors
 var (
-	ErrVersionNotContiguous            = errors.New("version not contiguous")
-	ErrInsertFailedForNewProjection   = errors.New("insert failed for new projection")
-	ErrContiguousSaveFailed            = errors.New("contiguous save failed")
-	ErrInvariantViolation              = errors.New("invariant violation")
-	ErrNoCheckpoint                    = errors.New("no checkpoint found")
+	ErrVersionNotContiguous         = errors.New("version not contiguous")
+	ErrInsertFailedForNewProjection = errors.New("insert failed for new projection")
+	ErrContiguousSaveFailed         = errors.New("contiguous save failed")
+	ErrInvariantViolation           = errors.New("invariant violation")
+	ErrNoCheckpoint                 = errors.New("no checkpoint found")
 )

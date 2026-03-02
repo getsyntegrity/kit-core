@@ -203,3 +203,48 @@ func TestResilientEventHandler_GetEventType(t *testing.T) {
 
 	assert.Equal(t, "test.event", resilientHandler.GetEventType())
 }
+
+func TestResilientEventHandler_GetCircuitBreakerState_ResetCircuitBreaker_GetStats(t *testing.T) {
+	mockHandler := NewMockEventHandler()
+	mockHandler.GetEventTypeFunc = func() string { return "test" }
+	mockHandler.HandleFunc = func(ctx context.Context, event interface{}) error { return nil }
+
+	config := Config{
+		CircuitBreaker: CircuitBreakerConfig{
+			Enabled:          true,
+			FailureThreshold: 2,
+			Timeout:          time.Minute,
+		},
+	}
+	clock := FixedClock{Time: time.Now()}
+	resilientHandler := NewResilientEventHandler(mockHandler, nil, config, clock)
+
+	state := resilientHandler.GetCircuitBreakerState()
+	assert.Equal(t, "CLOSED", state)
+
+	stats := resilientHandler.GetCircuitBreakerStats()
+	assert.NotNil(t, stats)
+
+	resilientHandler.ResetCircuitBreaker()
+	assert.Equal(t, "CLOSED", resilientHandler.GetCircuitBreakerState())
+}
+
+func TestResilientEventHandler_WithCircuitBreaker(t *testing.T) {
+	mockHandler := NewMockEventHandler()
+	mockHandler.GetEventTypeFunc = func() string { return "test" }
+	mockHandler.HandleFunc = func(ctx context.Context, event interface{}) error {
+		return nil
+	}
+	config := Config{
+		CircuitBreaker: CircuitBreakerConfig{
+			Enabled:          true,
+			FailureThreshold: 5,
+			Timeout:          time.Minute,
+		},
+	}
+	clock := FixedClock{Time: time.Now()}
+	resilientHandler := NewResilientEventHandler(mockHandler, nil, config, clock)
+	ctx := context.Background()
+	err := resilientHandler.Handle(ctx, "event")
+	require.NoError(t, err)
+}

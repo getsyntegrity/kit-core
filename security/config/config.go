@@ -21,11 +21,11 @@ type Config struct {
 
 // JWTConfig contains JWT authentication configuration.
 type JWTConfig struct {
-	Enabled    bool
-	Secret     string
-	Issuer     string
-	Audience   string
-	Expiration int
+	Enabled     bool
+	Secret      string
+	Issuer      string
+	Audience    string
+	Expiration  int
 	RefreshTime int
 }
 

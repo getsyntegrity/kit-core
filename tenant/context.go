@@ -17,7 +17,7 @@ const (
 	CausationIDKey   TenantContextKey = "causation_id"
 	RequestIDKey     TenantContextKey = "request_id"
 	SessionIDKey     TenantContextKey = "session_id"
-	DefaultTenantID  = "default"
+	DefaultTenantID                   = "default"
 )
 
 // TenantContext represents tenant context information.

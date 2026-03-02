@@ -4,14 +4,14 @@ package validation
 type ErrorType string
 
 const (
-	ErrorTypeRequired     ErrorType = "required"
-	ErrorTypeInvalid      ErrorType = "invalid"
-	ErrorTypeTooShort     ErrorType = "too_short"
-	ErrorTypeTooLong      ErrorType = "too_long"
+	ErrorTypeRequired      ErrorType = "required"
+	ErrorTypeInvalid       ErrorType = "invalid"
+	ErrorTypeTooShort      ErrorType = "too_short"
+	ErrorTypeTooLong       ErrorType = "too_long"
 	ErrorTypeInvalidFormat ErrorType = "invalid_format"
-	ErrorTypeInvalidRange ErrorType = "invalid_range"
-	ErrorTypeInvalidEnum  ErrorType = "invalid_enum"
-	ErrorTypeCustom       ErrorType = "custom"
+	ErrorTypeInvalidRange  ErrorType = "invalid_range"
+	ErrorTypeInvalidEnum   ErrorType = "invalid_enum"
+	ErrorTypeCustom        ErrorType = "custom"
 )
 
 // GenericValidationError represents a single validation error.

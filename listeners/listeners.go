@@ -80,8 +80,8 @@ func WithRetryPolicy(policy RetryPolicy) ListenerOption {
 
 // Errors
 var (
-	ErrVersionNotContiguous     = errors.New("version not contiguous")
-	ErrInvariantViolation       = errors.New("invariant violation")
-	ErrTransientInfrastructure  = errors.New("transient infrastructure error")
-	ErrNoCheckpoint             = errors.New("no checkpoint found")
+	ErrVersionNotContiguous    = errors.New("version not contiguous")
+	ErrInvariantViolation      = errors.New("invariant violation")
+	ErrTransientInfrastructure = errors.New("transient infrastructure error")
+	ErrNoCheckpoint            = errors.New("no checkpoint found")
 )
