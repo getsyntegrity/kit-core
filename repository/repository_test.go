@@ -40,11 +40,11 @@ func TestBaseRepository_ValidatePagination(t *testing.T) {
 func TestBaseRepository_BuildPagination(t *testing.T) {
 	r := NewBaseRepository[string]()
 	tests := []struct {
-		name        string
-		offset      int
-		limit       int
-		wantOffset  int
-		wantLimit   int
+		name       string
+		offset     int
+		limit      int
+		wantOffset int
+		wantLimit  int
 	}{
 		{"valid", 0, 10, 0, 10},
 		{"negative offset clamped", -5, 10, 0, 10},

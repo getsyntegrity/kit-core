@@ -66,7 +66,7 @@ func TestEncodeCursor(t *testing.T) {
 	t.Run("valid cursor", func(t *testing.T) {
 		c := &Cursor{
 			Timestamp: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-			Values:   map[string]interface{}{"id": "123"},
+			Values:    map[string]interface{}{"id": "123"},
 		}
 		s, err := EncodeCursor(c)
 		assert.NoError(t, err)
@@ -92,7 +92,7 @@ func TestDecodeCursor(t *testing.T) {
 	t.Run("roundtrip", func(t *testing.T) {
 		orig := &Cursor{
 			Timestamp: time.Date(2025, 1, 1, 0, 0, 0, 0, time.UTC),
-			Values:   map[string]interface{}{"id": "x"},
+			Values:    map[string]interface{}{"id": "x"},
 		}
 		enc, err := EncodeCursor(orig)
 		assert.NoError(t, err)
