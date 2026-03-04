@@ -25,6 +25,8 @@ jobs:
           echo "actor=${{ github.actor }}"
 
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run CI
         run: syntegrity-ci run --profile go-library
