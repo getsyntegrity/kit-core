@@ -31,4 +31,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Syntegrity CI
-        run: /usr/local/bin/syntegrity-ci run --profile go-library
+        run: /usr/local/bin/syntegrity-ci --profile go-lib
