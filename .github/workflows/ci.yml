@@ -10,20 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
+      contents: read
       packages: read
 
     container:
-      image: ghcr.io/getsyntegrity/syntegrity-ci:latest
+      image: ghcr.io/getsyntegrity/syntegrity-ci:0.0.1
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Debug repo
-        run: |
-          echo "repository=${{ github.repository }}"
-          echo "actor=${{ github.actor }}"
-
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
