@@ -19,9 +19,12 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      - name: Debug repo
+        run: |
+          echo "repository=${{ github.repository }}"
+          echo "actor=${{ github.actor }}"
+
       - uses: actions/checkout@v4
-        with:
-          repository: '${{ github.repository }}'
 
       - name: Run CI
         run: syntegrity-ci run --profile go-library
