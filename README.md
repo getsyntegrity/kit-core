@@ -1,4 +1,5 @@
 # kit-core
+pablo
 
 Minimal, universal infrastructure foundation for Go services. Abstractions for time, identity, and persistence that keep application code testable and portable.
 
