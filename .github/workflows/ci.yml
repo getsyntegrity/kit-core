@@ -8,8 +8,13 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    permissions:
+      packages: read
     container:
       image: ghcr.io/getsyntegrity/syntegrity-ci:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
