@@ -20,6 +20,12 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
+      - name: Debug container
+        run: |
+          echo "PATH=$PATH"
+          ls -la /usr/local/bin || true
+          ls -la /go/bin || true
+          which syntegrity-ci || true
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
