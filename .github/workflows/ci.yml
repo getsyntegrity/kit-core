@@ -14,7 +14,7 @@ jobs:
       packages: read
 
     container:
-      image: ghcr.io/getsyntegrity/syntegrity-ci:0.0.1
+      image: ghcr.io/getsyntegrity/syntegrity-ci:0.0.2
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
