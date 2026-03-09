@@ -26,4 +26,4 @@ jobs:
           sudo mv forge /usr/local/bin/
 
       - name: Run forge CI
-        run: forge --profile go-lib
+        run: forge pr --profile go-lib
