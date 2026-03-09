@@ -13,22 +13,16 @@ jobs:
       contents: read
       packages: read
 
-    container:
-      image: ghcr.io/getsyntegrity/syntegrity-ci:0.0.5
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
-      - name: Debug container
-        run: |
-          echo "PATH=$PATH"
-          ls -la /usr/local/bin || true
-          ls -la /go/bin || true
-          which syntegrity-ci || true
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Syntegrity CI
-        run: /usr/local/bin/syntegrity-ci --profile go-lib
+      - name: Install forge
+        run: |
+          curl -L https://github.com/devforge/devforge/releases/latest/download/forge-linux-amd64 -o forge
+          chmod +x forge
+          sudo mv forge /usr/local/bin/
+
+      - name: Run forge CI
+        run: forge --profile go-lib
