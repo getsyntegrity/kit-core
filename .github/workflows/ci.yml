@@ -20,7 +20,8 @@ jobs:
 
       - name: Install forge
         run: |
-          curl -L https://github.com/devforge/devforge/releases/latest/download/forge-linux-amd64 -o forge
+          curl -fsSL https://github.com/pablogore/devforge/releases/latest/download/forge-linux-amd64 -o forge
+          file forge
           chmod +x forge
           sudo mv forge /usr/local/bin/
 
