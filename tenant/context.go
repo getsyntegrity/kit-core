@@ -8,8 +8,11 @@ import (
 )
 
 // TenantContextKey is the key used to store tenant information in context.
+//
+//nolint:revive // exported: tenant-prefixed names are intentional for clarity at call sites
 type TenantContextKey string
 
+// Context keys for tenant and request metadata.
 const (
 	TenantIDKey      TenantContextKey = "tenant_id"
 	UserIDKey        TenantContextKey = "user_id"
@@ -21,6 +24,8 @@ const (
 )
 
 // TenantContext represents tenant context information.
+//
+//nolint:revive // exported: tenant-prefixed names are intentional for clarity at call sites
 type TenantContext struct {
 	TenantID      string `json:"tenant_id"`
 	UserID        string `json:"user_id"`
@@ -31,6 +36,8 @@ type TenantContext struct {
 }
 
 // TenantContextService provides methods for managing tenant context.
+//
+//nolint:revive // exported: tenant-prefixed names are intentional for clarity at call sites
 type TenantContextService struct {
 	defaultTenantID string
 	tenantValidator TenantValidator

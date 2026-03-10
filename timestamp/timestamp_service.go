@@ -3,6 +3,8 @@ package timestamp
 import "time"
 
 // TimestampService handles timestamp operations in the application layer.
+//
+//nolint:revive // exported: timestamp-prefixed name is intentional for clarity at call sites
 type TimestampService struct {
 	timeProvider TimeProvider
 }

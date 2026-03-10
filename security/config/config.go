@@ -22,7 +22,7 @@ type Config struct {
 // JWTConfig contains JWT authentication configuration.
 type JWTConfig struct {
 	Enabled     bool
-	Secret      string
+	Secret      string //nolint:gosec // G117 config field name for JWT secret
 	Issuer      string
 	Audience    string
 	Expiration  int
@@ -33,7 +33,7 @@ type JWTConfig struct {
 type OAuth2Config struct {
 	Enabled      bool
 	ClientID     string
-	ClientSecret string
+	ClientSecret string //nolint:gosec // G117 config field name for OAuth2 client secret
 	RedirectURL  string
 	AuthURL      string
 	TokenURL     string
@@ -47,7 +47,7 @@ type HydraConfig struct {
 	AdminURL     string
 	PublicURL    string
 	ClientID     string
-	ClientSecret string
+	ClientSecret string //nolint:gosec // G117 config field name for Hydra client secret
 }
 
 // OAuthkeeperConfig contains OAuthkeeper (Zanzibar) configuration.

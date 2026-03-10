@@ -43,7 +43,7 @@ type ListenerOption func(interface{}) error
 
 // WithRecv sets the function that receives events from the stream.
 func WithRecv(recvFunc func(ctx context.Context) (Event, error)) ListenerOption {
-	return func(l interface{}) error {
+	return func(_ interface{}) error {
 		if recvFunc == nil {
 			return fmt.Errorf("recv function cannot be nil")
 		}
@@ -53,7 +53,7 @@ func WithRecv(recvFunc func(ctx context.Context) (Event, error)) ListenerOption 
 
 // WithHandler sets the function that handles events.
 func WithHandler(handlerFunc func(ctx context.Context, event Event) error) ListenerOption {
-	return func(l interface{}) error {
+	return func(_ interface{}) error {
 		if handlerFunc == nil {
 			return fmt.Errorf("handler function cannot be nil")
 		}
@@ -63,7 +63,7 @@ func WithHandler(handlerFunc func(ctx context.Context, event Event) error) Liste
 
 // WithCheckpointStore sets the functions that load and save checkpoints.
 func WithCheckpointStore(loadFunc func(ctx context.Context) (int64, error), saveFunc func(ctx context.Context, version int64) (bool, error)) ListenerOption {
-	return func(l interface{}) error {
+	return func(_ interface{}) error {
 		if loadFunc == nil || saveFunc == nil {
 			return fmt.Errorf("load and save checkpoint functions cannot be nil")
 		}
@@ -72,8 +72,10 @@ func WithCheckpointStore(loadFunc func(ctx context.Context) (int64, error), save
 }
 
 // WithRetryPolicy sets the retry policy for checkpoint persistence.
+//
+//nolint:revive // policy is part of the option API and may be used by the listener implementation
 func WithRetryPolicy(policy RetryPolicy) ListenerOption {
-	return func(l interface{}) error {
+	return func(_ interface{}) error {
 		return nil
 	}
 }

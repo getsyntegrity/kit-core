@@ -70,6 +70,85 @@ Contributors must:
 
 ---
 
+## Testing Strategy
+
+The project uses **BDD + TDD** with [go-specs](https://github.com/pablogore/go-specs).
+
+### Test philosophy
+
+- **Behavior Driven Development** — Structure tests as describe → when → it. One spec entrypoint per package.
+- **Deterministic unit tests** — No flaky tests; no dependence on wall clock, random seed, or environment.
+- **Explicit test context** — Time and identity are injected via interfaces; use fakes in tests.
+- **No hidden I/O** — Unit tests do not perform network, filesystem, or environment reads.
+- **No global state** — Test fixtures and fakes are passed in or created per spec.
+- **No reliance on environment variables** — All inputs are set in the test.
+
+### Spec structure
+
+Tests must follow **describe → when → it** using go-specs:
+
+```go
+specs.Describe(t, "PackageName", func(s *specs.Spec) {
+    s.When("condition or subject", func(s *specs.Spec) {
+        s.It("expected behavior", func(ctx *specs.Context) {
+            assert.NoError(ctx.T, err)
+        })
+    })
+})
+```
+
+- **One entrypoint per package:** `func TestPackageName(t *testing.T) { specs.Describe(t, "packagename", ...) }`
+- Use `ctx.T` for testify assertions: `assert.Equal(ctx.T, expected, actual)`
+
+### Test layers
+
+- **Domain tests** — Pure logic; no infrastructure. Use in-memory fakes and fixtures only.
+- **Application tests** — Application services with injected domain and adapters; use fakes for repositories, clock, ID generator.
+- **Adapter tests** — Adapters implementing kit-core interfaces; may use test doubles from `testkit`.
+
+Domain must not depend on infrastructure. Keep domain specs free of I/O and real time.
+
+### TDD workflow
+
+- Write a **failing spec** first.
+- Implement **minimal code** to pass.
+- **Refactor**; keep specs green.
+- All new code must be written **test-first** when feasible.
+
+### Assertions
+
+Use only:
+
+- `github.com/stretchr/testify/assert`
+- `github.com/stretchr/testify/require`
+
+Do not introduce other assertion libraries.
+
+### Deterministic testing
+
+Tests must **not**:
+
+- use `time.Sleep`
+- read environment variables
+- perform network calls
+- access the filesystem
+- depend on real clocks or system RNG
+
+When time or identity is needed, inject a **fake clock** or **deterministic ID generator** (e.g. from `testkit`).
+
+### Testkit
+
+Reusable test utilities live under **`testkit`** (root package):
+
+- **fake/** — Deterministic in-memory implementations of interfaces (e.g. clock, repository).
+- **spy/** — Record calls and parameters for verification.
+- **fixtures/** — Reusable test data (e.g. valid ULIDs, tenant IDs).
+- **builders/** — Fluent builders for test entities where helpful.
+
+Fakes and fixtures must be deterministic and must not perform external calls.
+
+---
+
 ## Engineering Discipline
 
 - **Deterministic unit tests only** — Tests must be fully deterministic. No flaky tests; no tests that depend on wall clock, random seed, or environment. Use fake clocks and deterministic ID generators in tests.

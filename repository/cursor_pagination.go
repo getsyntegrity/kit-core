@@ -1,3 +1,5 @@
+// Package repository provides types and utilities for repository operations,
+// including cursor-based pagination and query options.
 package repository
 
 import (

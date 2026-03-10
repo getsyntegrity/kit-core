@@ -1,3 +1,4 @@
+// Package timestamp provides time abstraction for deterministic testing.
 package timestamp
 
 import "time"

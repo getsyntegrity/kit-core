@@ -3,6 +3,8 @@ package tenant
 import "context"
 
 // TenantContextServiceInterface represents the interface for tenant context operations.
+//
+//nolint:revive // exported: tenant-prefixed names are intentional for clarity at call sites
 type TenantContextServiceInterface interface {
 	WithTenantContext(ctx context.Context, tenantCtx TenantContext) context.Context
 	GetTenantID(ctx context.Context) (string, error)
@@ -22,6 +24,8 @@ type TenantContextServiceInterface interface {
 }
 
 // TenantValidator represents a tenant validator interface.
+//
+//nolint:revive // exported: tenant-prefixed names are intentional for clarity at call sites
 type TenantValidator interface {
 	ValidateTenantID(tenantID string) error
 	ValidateUserID(userID string) error

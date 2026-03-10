@@ -4,267 +4,134 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/pablogore/go-specs/specs"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestError(t *testing.T) {
-	tests := []struct {
-		name     string
-		err      *Error
-		expected string
-	}{
-		{
-			name: "error without cause",
-			err: &Error{
-				Code:    "TEST_CODE",
-				Message: "test message",
-			},
-			expected: "TEST_CODE: test message",
-		},
-		{
-			name: "error with cause",
-			err: &Error{
-				Code:    "TEST_CODE",
-				Message: "test message",
-				Cause:   errors.New("original error"),
-			},
-			expected: "TEST_CODE: test message (caused by: original error)",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expected, tt.err.Error())
+func TestDomainErrors(t *testing.T) {
+	specs.Describe(t, "domain errors", func(s *specs.Spec) {
+		s.When("Error", func(s *specs.Spec) {
+			s.It("formats without cause", func(ctx *specs.Context) {
+				err := &Error{Code: "TEST_CODE", Message: "test message"}
+				assert.Equal(ctx.T, "TEST_CODE: test message", err.Error())
+			})
+			s.It("formats with cause", func(ctx *specs.Context) {
+				err := &Error{
+					Code:    "TEST_CODE",
+					Message: "test message",
+					Cause:   errors.New("original error"),
+				}
+				assert.Equal(ctx.T, "TEST_CODE: test message (caused by: original error)", err.Error())
+			})
+			s.It("Unwrap returns cause", func(ctx *specs.Context) {
+				originalErr := errors.New("original error")
+				err := &Error{Code: "TEST_CODE", Message: "test message", Cause: originalErr}
+				assert.Equal(ctx.T, originalErr, err.Unwrap())
+			})
+			s.It("Unwrap returns nil when no cause", func(ctx *specs.Context) {
+				err := &Error{Code: "TEST_CODE", Message: "test message"}
+				assert.Nil(ctx.T, err.Unwrap())
+			})
 		})
-	}
-}
 
-func TestError_Unwrap(t *testing.T) {
-	originalErr := errors.New("original error")
-	err := &Error{
-		Code:    "TEST_CODE",
-		Message: "test message",
-		Cause:   originalErr,
-	}
-
-	assert.Equal(t, originalErr, err.Unwrap())
-}
-
-func TestError_Unwrap_NilCause(t *testing.T) {
-	err := &Error{
-		Code:    "TEST_CODE",
-		Message: "test message",
-	}
-
-	assert.Nil(t, err.Unwrap())
-}
-
-func TestNewError(t *testing.T) {
-	err := NewError("CODE", "message")
-
-	assert.Equal(t, "CODE", err.Code)
-	assert.Equal(t, "message", err.Message)
-	assert.Nil(t, err.Cause)
-}
-
-func TestNewErrorWithCause(t *testing.T) {
-	cause := errors.New("original error")
-	err := NewErrorWithCause("CODE", "message", cause)
-
-	assert.Equal(t, "CODE", err.Code)
-	assert.Equal(t, "message", err.Message)
-	assert.Equal(t, cause, err.Cause)
-}
-
-func TestIsNotFound(t *testing.T) {
-	tests := []struct {
-		name     string
-		err      error
-		expected bool
-	}{
-		{
-			name:     "nil error",
-			err:      nil,
-			expected: false,
-		},
-		{
-			name:     "not found error",
-			err:      ErrNotFound,
-			expected: true,
-		},
-		{
-			name: "wrapped not found error",
-			err: &Error{
-				Code:    ErrCodeNotFound,
-				Message: "not found",
-			},
-			expected: true,
-		},
-		{
-			name:     "different error code",
-			err:      ErrInternal,
-			expected: false,
-		},
-		{
-			name: "wrapped different error",
-			err: &Error{
-				Code:    ErrCodeInternal,
-				Message: "internal error",
-			},
-			expected: false,
-		},
-		{
-			name:     "wrapped using errors.Is",
-			err:      errors.New("wrapped: not found"),
-			expected: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := IsNotFound(tt.err)
-			assert.Equal(t, tt.expected, result)
+		s.When("NewError", func(s *specs.Spec) {
+			s.It("sets code and message and no cause", func(ctx *specs.Context) {
+				err := NewError("CODE", "message")
+				assert.Equal(ctx.T, "CODE", err.Code)
+				assert.Equal(ctx.T, "message", err.Message)
+				assert.Nil(ctx.T, err.Cause)
+			})
 		})
-	}
-}
 
-func TestIsInvalidState(t *testing.T) {
-	tests := []struct {
-		name     string
-		err      error
-		expected bool
-	}{
-		{
-			name:     "nil error",
-			err:      nil,
-			expected: false,
-		},
-		{
-			name:     "invalid state error",
-			err:      ErrInvalidState,
-			expected: true,
-		},
-		{
-			name: "wrapped invalid state error",
-			err: &Error{
-				Code:    ErrCodeInvalidState,
-				Message: "invalid state",
-			},
-			expected: true,
-		},
-		{
-			name:     "different error code",
-			err:      ErrInternal,
-			expected: false,
-		},
-		{
-			name: "wrapped different error",
-			err: &Error{
-				Code:    ErrCodeInternal,
-				Message: "internal error",
-			},
-			expected: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := IsInvalidState(tt.err)
-			assert.Equal(t, tt.expected, result)
+		s.When("NewErrorWithCause", func(s *specs.Spec) {
+			s.It("sets code message and cause", func(ctx *specs.Context) {
+				cause := errors.New("original error")
+				err := NewErrorWithCause("CODE", "message", cause)
+				assert.Equal(ctx.T, "CODE", err.Code)
+				assert.Equal(ctx.T, "message", err.Message)
+				assert.Equal(ctx.T, cause, err.Cause)
+			})
 		})
-	}
-}
 
-func TestIsConcurrency(t *testing.T) {
-	tests := []struct {
-		name     string
-		err      error
-		expected bool
-	}{
-		{
-			name:     "nil error",
-			err:      nil,
-			expected: false,
-		},
-		{
-			name:     "concurrency error",
-			err:      ErrConcurrency,
-			expected: true,
-		},
-		{
-			name: "wrapped concurrency error",
-			err: &Error{
-				Code:    ErrCodeConcurrency,
-				Message: "concurrency conflict",
-			},
-			expected: true,
-		},
-		{
-			name:     "different error code",
-			err:      ErrInternal,
-			expected: false,
-		},
-		{
-			name: "wrapped different error",
-			err: &Error{
-				Code:    ErrCodeInternal,
-				Message: "internal error",
-			},
-			expected: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := IsConcurrency(tt.err)
-			assert.Equal(t, tt.expected, result)
+		s.When("IsNotFound", func(s *specs.Spec) {
+			s.It("covers all cases", func(ctx *specs.Context) {
+				tests := []struct {
+					name     string
+					err      error
+					expected bool
+				}{
+					{"nil error", nil, false},
+					{"not found error", ErrNotFound, true},
+					{"wrapped not found error", &Error{Code: ErrCodeNotFound, Message: "not found"}, true},
+					{"different error code", ErrInternal, false},
+					{"wrapped different error", &Error{Code: ErrCodeInternal, Message: "internal error"}, false},
+					{"wrapped using errors.Is", errors.New("wrapped: not found"), false},
+				}
+				for _, tt := range tests {
+					result := IsNotFound(tt.err)
+					assert.Equal(ctx.T, tt.expected, result, "case: %s", tt.name)
+				}
+			})
 		})
-	}
-}
 
-func TestIsValidation(t *testing.T) {
-	tests := []struct {
-		name     string
-		err      error
-		expected bool
-	}{
-		{
-			name:     "nil error",
-			err:      nil,
-			expected: false,
-		},
-		{
-			name:     "validation error",
-			err:      ErrValidation,
-			expected: true,
-		},
-		{
-			name: "wrapped validation error",
-			err: &Error{
-				Code:    ErrCodeValidation,
-				Message: "validation failed",
-			},
-			expected: true,
-		},
-		{
-			name:     "different error code",
-			err:      ErrInternal,
-			expected: false,
-		},
-		{
-			name: "wrapped different error",
-			err: &Error{
-				Code:    ErrCodeInternal,
-				Message: "internal error",
-			},
-			expected: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			result := IsValidation(tt.err)
-			assert.Equal(t, tt.expected, result)
+		s.When("IsInvalidState", func(s *specs.Spec) {
+			s.It("covers all cases", func(ctx *specs.Context) {
+				tests := []struct {
+					name     string
+					err      error
+					expected bool
+				}{
+					{"nil error", nil, false},
+					{"invalid state error", ErrInvalidState, true},
+					{"wrapped invalid state error", &Error{Code: ErrCodeInvalidState, Message: "invalid state"}, true},
+					{"different error code", ErrInternal, false},
+					{"wrapped different error", &Error{Code: ErrCodeInternal, Message: "internal error"}, false},
+				}
+				for _, tt := range tests {
+					result := IsInvalidState(tt.err)
+					assert.Equal(ctx.T, tt.expected, result, "case: %s", tt.name)
+				}
+			})
 		})
-	}
+
+		s.When("IsConcurrency", func(s *specs.Spec) {
+			s.It("covers all cases", func(ctx *specs.Context) {
+				tests := []struct {
+					name     string
+					err      error
+					expected bool
+				}{
+					{"nil error", nil, false},
+					{"concurrency error", ErrConcurrency, true},
+					{"wrapped concurrency error", &Error{Code: ErrCodeConcurrency, Message: "concurrency conflict"}, true},
+					{"different error code", ErrInternal, false},
+					{"wrapped different error", &Error{Code: ErrCodeInternal, Message: "internal error"}, false},
+				}
+				for _, tt := range tests {
+					result := IsConcurrency(tt.err)
+					assert.Equal(ctx.T, tt.expected, result, "case: %s", tt.name)
+				}
+			})
+		})
+
+		s.When("IsValidation", func(s *specs.Spec) {
+			s.It("covers all cases", func(ctx *specs.Context) {
+				tests := []struct {
+					name     string
+					err      error
+					expected bool
+				}{
+					{"nil error", nil, false},
+					{"validation error", ErrValidation, true},
+					{"wrapped validation error", &Error{Code: ErrCodeValidation, Message: "validation failed"}, true},
+					{"different error code", ErrInternal, false},
+					{"wrapped different error", &Error{Code: ErrCodeInternal, Message: "internal error"}, false},
+				}
+				for _, tt := range tests {
+					result := IsValidation(tt.err)
+					assert.Equal(ctx.T, tt.expected, result, "case: %s", tt.name)
+				}
+			})
+		})
+	})
 }

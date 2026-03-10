@@ -6,8 +6,10 @@ import (
 )
 
 const (
-	SortDirectionAsc  = "asc"
+	// SortDirectionDesc descending sort order
 	SortDirectionDesc = "desc"
+	// SortDirectionAsc ascending sort order
+	SortDirectionAsc = "asc"
 )
 
 // QueryOptions represents query parameters for repository operations.
