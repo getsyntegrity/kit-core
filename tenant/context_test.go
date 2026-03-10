@@ -119,6 +119,13 @@ func TestTenant(t *testing.T) {
 				assert.Error(ctx.T, err)
 				assert.Contains(ctx.T, err.Error(), "invalid tenant ID")
 			})
+			s.It("errors when tenant ID equals custom default", func(ctx *specs.Context) {
+				svc := NewTenantContextServiceWithDefaults("custom-default", nil)
+				bg := svc.WithTenantContext(context.Background(), TenantContext{TenantID: "custom-default"})
+				_, err := svc.RequireTenantID(bg)
+				assert.Error(ctx.T, err)
+				assert.Contains(ctx.T, err.Error(), "cannot be default")
+			})
 		})
 
 		s.When("TenantContextService_GetUserID", func(s *specs.Spec) {
@@ -294,6 +301,22 @@ func TestTenant(t *testing.T) {
 				assert.Equal(ctx.T, "c2", tc.CausationID)
 				assert.Equal(ctx.T, "r1", tc.RequestID)
 				assert.Equal(ctx.T, "s1", tc.SessionID)
+			})
+			s.It("when to is empty context, merged result has only from's fields", func(ctx *specs.Context) {
+				svc := NewTenantContextService()
+				from := svc.WithTenantContext(context.Background(), TenantContext{
+					TenantID: "f1", UserID: "f2", CorrelationID: "f3",
+					CausationID: "f4", RequestID: "f5", SessionID: "f6",
+				})
+				to := context.Background()
+				merged := svc.MergeTenantContext(from, to)
+				tc, _ := svc.GetTenantContext(merged)
+				assert.Equal(ctx.T, "f1", tc.TenantID)
+				assert.Equal(ctx.T, "f2", tc.UserID)
+				assert.Equal(ctx.T, "f3", tc.CorrelationID)
+				assert.Equal(ctx.T, "f4", tc.CausationID)
+				assert.Equal(ctx.T, "f5", tc.RequestID)
+				assert.Equal(ctx.T, "f6", tc.SessionID)
 			})
 		})
 

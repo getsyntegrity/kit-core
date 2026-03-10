@@ -18,12 +18,26 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
       - name: Install forge
         run: |
           curl -fsSL https://github.com/pablogore/devforge/releases/latest/download/forge-linux-amd64 -o forge
           file forge
           chmod +x forge
           sudo mv forge /usr/local/bin/
+
+      - name: Generate coverage profile and enforce threshold
+        run: |
+          go mod download
+          go test ./domain ./errorschain ./fflags ./idgen ./infra/capabilities ./listeners ./repository ./security/config ./strategy ./tenant ./timestamp ./validation -race -coverprofile=coverage.out
+          # Forge does not read coverage.out; enforce 90% here (go tool cover total is last line)
+          total=$(go tool cover -func=coverage.out | tail -1 | awk '{gsub(/%/,""); print $3}')
+          echo "Coverage total: ${total}%"
+          awk -v t="$total" 'BEGIN{if(t==""||t<90){print "Coverage "t"% is below 90%"; exit 1}}' || exit 1
 
       - name: Run forge CI
         run: forge pr --profile go-lib
