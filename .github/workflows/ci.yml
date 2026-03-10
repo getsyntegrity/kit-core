@@ -42,7 +42,7 @@ jobs:
       - name: Run specs and enforce coverage threshold
         run: |
           go mod download
-          specs run -exclude=testkit -- -race -coverprofile=coverage.out
+          specs run -- $(go list ./... | grep -v '/testkit') -race -coverprofile=coverage.out
           # Enforce 90% (go tool cover total is last line)
           total=$(go tool cover -func=coverage.out | tail -1 | awk '{gsub(/%/,""); print $3}')
           echo "Coverage total: ${total}%"
