@@ -34,7 +34,10 @@ jobs:
           sudo mv forge /usr/local/bin/
 
       - name: Install specs CLI
-        run: go install github.com/pablogore/go-specs/cmd/specs@v0.0.8
+        run: |
+          curl -fsSL https://github.com/pablogore/go-specs/releases/download/v0.0.8/specs-cli-linux-amd64 -o specs
+          chmod +x specs
+          sudo mv specs /usr/local/bin/
 
       - name: Run specs and enforce coverage threshold
         run: |
