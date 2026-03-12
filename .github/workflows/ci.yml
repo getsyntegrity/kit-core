@@ -34,7 +34,7 @@ jobs:
 
       - name: Install specs CLI
         run: |
-          curl -fsSL https://github.com/pablogore/go-specs/releases/download/v0.0.8/specs-cli-linux-amd64 -o specs
+          curl -fsSL https://github.com/pablogore/go-specs/releases/download/v0.0.9/specs-cli-linux-amd64 -o specs
           chmod +x specs
           sudo mv specs /usr/local/bin/
 
