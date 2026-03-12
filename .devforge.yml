@@ -1,3 +1,4 @@
+# Static-analysis: forge pr fails until DevForge uses .../v2/cmd/golangci-lint. See docs/DEVFORGE-GOLANGCI-LINT.md
 mode: full
 policies:
   coverage:

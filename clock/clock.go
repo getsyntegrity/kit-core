@@ -1,3 +1,4 @@
+// Package clock provides the Clock interface for time abstraction.
 package clock
 
 import "time"

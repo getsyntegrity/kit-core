@@ -137,8 +137,8 @@ func TestStrategy(t *testing.T) {
 				repo := new(mockQueryableRepo)
 				repo.On("Query", bg, "tid", opts).Return([]string{"a"}, nil)
 
-				strat := &SimpleQueryStrategy[string]{}
-				result, err := strat.Execute(bg, "tid", repo, opts)
+				qs := &SimpleQueryStrategy[string]{}
+				result, err := qs.Execute(bg, "tid", repo, opts)
 				assert.NoError(ctx.T, err)
 				assert.Equal(ctx.T, []string{"a"}, result)
 				repo.AssertExpectations(ctx.T)
@@ -149,15 +149,15 @@ func TestStrategy(t *testing.T) {
 				repo := new(mockQueryableRepo)
 				repo.On("Query", bg, "tid", opts).Return(nil, errors.New("db error"))
 
-				strat := &SimpleQueryStrategy[string]{}
-				_, err := strat.Execute(bg, "tid", repo, opts)
+				qs := &SimpleQueryStrategy[string]{}
+				_, err := qs.Execute(bg, "tid", repo, opts)
 				assert.Error(ctx.T, err)
 				assert.Equal(ctx.T, "db error", err.Error())
 				repo.AssertExpectations(ctx.T)
 			})
 			s.It("GetName returns simple", func(ctx *specs.Context) {
-				strat := &SimpleQueryStrategy[string]{}
-				assert.Equal(ctx.T, "simple", strat.GetName())
+				qs := &SimpleQueryStrategy[string]{}
+				assert.Equal(ctx.T, "simple", qs.GetName())
 			})
 		})
 
@@ -168,16 +168,16 @@ func TestStrategy(t *testing.T) {
 				repo := new(mockQueryableRepo)
 				repo.On("Query", bg, "tid", mock.Anything).Return([]string{"a"}, nil)
 
-				strat := &PaginatedQueryStrategy[string]{}
-				result, err := strat.Execute(bg, "tid", repo, opts)
+				qs := &PaginatedQueryStrategy[string]{}
+				result, err := qs.Execute(bg, "tid", repo, opts)
 				assert.NoError(ctx.T, err)
 				assert.Equal(ctx.T, []string{"a"}, result)
 				assert.Equal(ctx.T, 10, opts.Limit)
 				repo.AssertExpectations(ctx.T)
 			})
 			s.It("GetName returns paginated", func(ctx *specs.Context) {
-				strat := &PaginatedQueryStrategy[string]{}
-				assert.Equal(ctx.T, "paginated", strat.GetName())
+				qs := &PaginatedQueryStrategy[string]{}
+				assert.Equal(ctx.T, "paginated", qs.GetName())
 			})
 		})
 
@@ -188,8 +188,8 @@ func TestStrategy(t *testing.T) {
 				repo := new(mockQueryableRepo)
 				repo.On("Query", bg, "tid", opts).Return([]string{"a"}, nil)
 
-				strat := &SearchQueryStrategy[string]{}
-				result, err := strat.Execute(bg, "tid", repo, opts)
+				qs := &SearchQueryStrategy[string]{}
+				result, err := qs.Execute(bg, "tid", repo, opts)
 				assert.NoError(ctx.T, err)
 				assert.Equal(ctx.T, []string{"a"}, result)
 				repo.AssertExpectations(ctx.T)
@@ -200,15 +200,15 @@ func TestStrategy(t *testing.T) {
 				repo := new(mockQueryableRepo)
 				repo.On("Search", bg, "tid", "q", []string{"name"}, 10).Return([]string{"b"}, nil)
 
-				strat := &SearchQueryStrategy[string]{}
-				result, err := strat.Execute(bg, "tid", repo, opts)
+				qs := &SearchQueryStrategy[string]{}
+				result, err := qs.Execute(bg, "tid", repo, opts)
 				assert.NoError(ctx.T, err)
 				assert.Equal(ctx.T, []string{"b"}, result)
 				repo.AssertExpectations(ctx.T)
 			})
 			s.It("GetName returns search", func(ctx *specs.Context) {
-				strat := &SearchQueryStrategy[string]{}
-				assert.Equal(ctx.T, "search", strat.GetName())
+				qs := &SearchQueryStrategy[string]{}
+				assert.Equal(ctx.T, "search", qs.GetName())
 			})
 		})
 
@@ -219,8 +219,8 @@ func TestStrategy(t *testing.T) {
 				repo := new(mockQueryableRepo)
 				repo.On("Query", bg, "tid", opts).Return([]string{"a"}, nil)
 
-				strat := &FilteredQueryStrategy[string]{}
-				result, err := strat.Execute(bg, "tid", repo, opts)
+				qs := &FilteredQueryStrategy[string]{}
+				result, err := qs.Execute(bg, "tid", repo, opts)
 				assert.NoError(ctx.T, err)
 				assert.Equal(ctx.T, []string{"a"}, result)
 				repo.AssertExpectations(ctx.T)
@@ -231,15 +231,15 @@ func TestStrategy(t *testing.T) {
 				repo := new(mockQueryableRepo)
 				repo.On("FindByFields", bg, "tid", map[string]interface{}{"status": "active"}).Return([]string{"c"}, nil)
 
-				strat := &FilteredQueryStrategy[string]{}
-				result, err := strat.Execute(bg, "tid", repo, opts)
+				qs := &FilteredQueryStrategy[string]{}
+				result, err := qs.Execute(bg, "tid", repo, opts)
 				assert.NoError(ctx.T, err)
 				assert.Equal(ctx.T, []string{"c"}, result)
 				repo.AssertExpectations(ctx.T)
 			})
 			s.It("GetName returns filtered", func(ctx *specs.Context) {
-				strat := &FilteredQueryStrategy[string]{}
-				assert.Equal(ctx.T, "filtered", strat.GetName())
+				qs := &FilteredQueryStrategy[string]{}
+				assert.Equal(ctx.T, "filtered", qs.GetName())
 			})
 		})
 	})

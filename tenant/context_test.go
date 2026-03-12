@@ -447,7 +447,7 @@ func TestTenant(t *testing.T) {
 		})
 
 		s.When("ConfigureLoggerCorrelationExtractor", func(s *specs.Spec) {
-			s.It("runs without panic and can be called multiple times", func(ctx *specs.Context) {
+			s.It("runs without panic and can be called multiple times", func(_ *specs.Context) {
 				ConfigureLoggerCorrelationExtractor()
 				ConfigureLoggerCorrelationExtractor()
 			})
@@ -462,7 +462,7 @@ func TestTenant(t *testing.T) {
 				assert.Equal(ctx.T, "c1", tc.CorrelationID)
 				assert.Equal(ctx.T, "c2", tc.CausationID)
 			})
-			s.It("handles nil pointers without panic", func(ctx *specs.Context) {
+			s.It("handles nil pointers without panic", func(_ *specs.Context) {
 				_ = EnsureTraceIDs(context.Background(), nil, nil)
 			})
 			s.It("fills pointers from context when empty", func(ctx *specs.Context) {
