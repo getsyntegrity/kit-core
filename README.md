@@ -102,4 +102,9 @@ func processOrder(ctx context.Context, r Repository[Order], c Clock) error {
 
 ## License
 
-[Specify license, e.g. MIT, Apache-2.0.]
+MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+Maintained by [GetSyntegrity](https://github.com/getsyntegrity).
+Created and maintained by Pablo Gore ([@pablogore](https://github.com/pablogore)).
